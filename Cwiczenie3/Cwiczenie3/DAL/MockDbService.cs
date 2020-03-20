@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Cwiczenie3.Models;
 
-namespace Cwiczenie3.Services
+namespace Cwiczenie3.DAL
 {
     public class MockDbService : IDbService
     {

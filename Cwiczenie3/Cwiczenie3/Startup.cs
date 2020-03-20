@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 //using Cwiczenie3.Serivices;
-using Cwiczenie3.Services;
+using Cwiczenie3.DAL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -31,7 +31,7 @@ namespace Cwiczenie3
             //Ninject
             //Autofac
             //...
-            services.AddTransient<IDbService, OracleDbService>();
+            services.AddTransient<IDbService, MockDbService>();
             services.AddControllers();
         }
 
@@ -50,7 +50,8 @@ namespace Cwiczenie3
                 await c.Invoke();
             });
             app.UseMiddleware<CustomMiddleware>();
-           
+
+            //app.UseHttpsRedirection;
 
             app.UseAuthorization();
 

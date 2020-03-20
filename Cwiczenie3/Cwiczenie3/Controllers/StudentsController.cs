@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Cwiczenie3.Models;
 //using Cwiczenie3.Serivices;
-using Cwiczenie3.Services;
+using Cwiczenie3.DAL;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -24,12 +24,12 @@ namespace Cwiczenie3.Controllers
 
         //2. QueryString
         [HttpGet]
-        public IActionResult GetStudents([FromServices]IDbService service, [FromQuery]string orderBy)
+        public IActionResult GetStudents(string orderBy)
         {
-            if (orderBy == "lastname")
+            /*if (orderBy == "lastname")
             {
                 return Ok(_dbService.GetStudents().OrderBy(s => s.LastName));
-            }
+            }*/
             return Ok(_dbService.GetStudents());
         }
 
@@ -38,11 +38,13 @@ namespace Cwiczenie3.Controllers
         [HttpGet("{id}")]
         public IActionResult GetStudent([FromRoute]int id) //action method
         {
-            if(id == 1)
+            if(id <= _dbService.GetStudents().Count())
             {
-                return Ok("Jan");
+                return Ok(_dbService.GetStudents().Where(student =>
+                student.IdStudent == id));
             }
-            return NotFound("Student was not found");
+            else
+                return NotFound("Student was not found");
         }
 
         //3. Body - cialo zadan
@@ -52,6 +54,18 @@ namespace Cwiczenie3.Controllers
             student.IndexNumber = $"s{new Random().Next(1, 20000)}";
             //...
             return Ok(student); //JSON 
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult PutStudent([FromRoute]int id )
+        { 
+            return Ok("Aktualizacja zakonczona");
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteStudent([FromRoute]int id)
+        {
+            return Ok("Usuwanie ukonczone");
         }
     }
 }
