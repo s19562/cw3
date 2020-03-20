@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+//using Cwiczenie3.Serivices;
+using Cwiczenie3.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -25,20 +27,30 @@ namespace Cwiczenie3
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Lifetime
+            //Ninject
+            //Autofac
+            //...
+            services.AddTransient<IDbService, OracleDbService>();
             services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            
+             app.UseDeveloperExceptionPage();
+
+             app.UseRouting();
+
+            //Doklejal do odpowiedzi naglowek http
+            app.Use(async (context, c) =>
             {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
+                context.Response.Headers.Add("Secret", "1234");
+                await c.Invoke();
+            });
+            app.UseMiddleware<CustomMiddleware>();
+           
 
             app.UseAuthorization();
 
