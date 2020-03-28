@@ -31,7 +31,7 @@ namespace Cwiczenie3
             //Ninject
             //Autofac
             //...
-            services.AddTransient<IDbService, MockDbService>();
+            services.AddTransient<IDbService, MssqlDbService>();
             services.AddControllers();
         }
 

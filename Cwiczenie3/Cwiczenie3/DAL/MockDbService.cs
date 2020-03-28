@@ -18,13 +18,18 @@ namespace Cwiczenie3.DAL
             new Student { IdStudent = 3, FirstName = "Krzysztof", LastName = "Andrzejewski", IndexNumber = "s5432" },
             };
         }
-    
 
+        public string GetSemester(int id)
+        {
+            throw new NotImplementedException();
+        }
 
         public IEnumerable<Student> GetStudents()
         {
             return _students;
         }
+
+
 
     }
 }

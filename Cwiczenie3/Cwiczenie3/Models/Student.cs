@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 namespace Cwiczenie3.Models
 {
     public class Student
@@ -7,6 +8,10 @@ namespace Cwiczenie3.Models
         public int IdStudent { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string birthDate { get; set; }
         public string IndexNumber { get; set; }
+        public string studyName { get; set; }
+        public int semester { get; set; }
+
     }
 }

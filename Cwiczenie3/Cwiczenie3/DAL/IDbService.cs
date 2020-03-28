@@ -8,6 +8,7 @@ namespace Cwiczenie3.DAL
 
     {
         public IEnumerable<Student> GetStudents();
+        public String GetSemester(int id);
     }
 
 }

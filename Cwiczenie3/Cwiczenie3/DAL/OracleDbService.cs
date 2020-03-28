@@ -6,7 +6,10 @@ namespace Cwiczenie3.DAL
 {
     public class OracleDbService : IDbService
     {
-      
+        public string GetSemester(int id)
+        {
+            throw new NotImplementedException();
+        }
 
         public IEnumerable<Student> GetStudents()
         {
