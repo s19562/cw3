@@ -6,6 +6,7 @@ using Cwiczenie3.Models;
 //using Cwiczenie3.Serivices;
 using Cwiczenie3.DAL;
 using Microsoft.AspNetCore.Mvc;
+//using System.Data.SqlClient;
   
    
 
