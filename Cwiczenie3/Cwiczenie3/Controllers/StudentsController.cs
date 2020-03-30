@@ -6,9 +6,9 @@ using Cwiczenie3.Models;
 //using Cwiczenie3.Serivices;
 using Cwiczenie3.DAL;
 using Microsoft.AspNetCore.Mvc;
-//using System.Data.SqlClient;
-  
-   
+using System.Data.SqlClient;
+
+
 
 
 namespace Cwiczenie3.Controllers
@@ -24,6 +24,36 @@ namespace Cwiczenie3.Controllers
             _dbService = service;
         }
 
+        //ja zaczełam jeszcze raz z wykładu bo się pogubiłam (nie działało mi dobrze)
+
+        [HttpGet("{id}")]
+        public IActionResult GetStudentId(int id)
+        {
+            using (SqlConnection con = new SqlConnection("Data Source=db-mssql;Initial Catalog=s19562;Integrated Security=True"))
+            using (SqlCommand com = new SqlCommand())
+            {
+
+                com.Connection = con;
+                com.CommandText = $"select * from Student where Student.IndexNumber={id}";
+
+                con.Open();
+                var dr = com.ExecuteReader();
+
+                dr.Read();
+                string idd = dr["IdEnrollment"].ToString();
+                dr.Close();
+                com.CommandText = $"select * from Enrollment where Enrollment.IdEnrollment={idd}";
+                dr = com.ExecuteReader();
+                var st = new List<string>();
+
+                dr.Read();
+                return Ok(dr["IdEnrollment"].ToString());
+                dr.Close();
+
+            }
+        }
+
+
         //2. QueryString
         [HttpGet]
         public IActionResult GetStudents(string orderBy)
@@ -31,30 +61,76 @@ namespace Cwiczenie3.Controllers
 
             //return Ok(_dbService.GetStudents
 
-                List<Student> list = (List<Student>)_dbService.GetStudents();
-
-            string o = "";
-
-            for(int i=0; i< list.Count; i++)
+            using (SqlConnection con = new SqlConnection("Data Source=db-mssql;Initial Catalog=s19562;Integrated Security=True"))
+            using (SqlCommand com = new SqlCommand())
             {
-                Student student = list[i];
-                o = o + student.FirstName + " " + student.LastName + " " + student.birthDate + " " + student.studyName +
-                     " " + student.semester + "\r\n";
 
+                com.Connection = con;
+                com.CommandText = "select * from Student";
+
+
+                con.Open();
+
+                var dr = com.ExecuteReader();
+                var st = new List<string>();
+
+                while (dr.Read())
+                {
+                    if (dr["LastName"] == DBNull.Value)
+                    {
+
+                    }
+                    Console.WriteLine(dr["LastName"].ToString());
+                    st.Add(dr["LastName"].ToString());
+
+                }
+                return Ok(st);
             }
-
-            return Ok(o);
         }
 
         [HttpGet("{id}/semester")]
         public IActionResult GetSemester(int id)
         {
-            return Ok(_dbService.GetSemester(id));
+            String st = "";
+            using (var con = new SqlConnection("Data Source=db-mssql;Initial Catalog=s19562;Integrated Security=True"))
+            using (var com = new SqlCommand())
+            {
+                com.Connection = con;
+                com.CommandText = "select Semester from enrollment join student on enrollment.Idenrollment=student.Idenrollment where student.IndexNumber=@id";
+                com.Parameters.AddWithValue("id", "s" + id.ToString());
+                con.Open();
+                var dr = com.ExecuteReader();
 
-      
+                while (dr.Read())
+                {
+                    st += st + dr["Semester"] + "\r\n";
+                }
+            }
+
+            return Ok(st);
         }
 
-        
+        [HttpGet("{id}")]
+        public IActionResult GetStudentWpis(String id)
+        {
+            using (SqlConnection con = new SqlConnection("Data Source=db-mssql;Initial Catalog=s19562;Integrated Security=True"))
+            using (SqlCommand com = new SqlCommand())
+            {
+                com.Connection = con;
+                com.CommandText = "select * from Student where Student.IndexNumber=@id";
+                com.Parameters.AddWithValue("id", id);
+                con.Open();
+                var dr = com.ExecuteReader();
+                dr.Read();
+                string ajdi = dr["IdEnrollment"].ToString();
+
+                return Ok(dr[0].ToString() + "," +dr[1] + "," +dr[2]);
+
+            }
+
+        }
+
+
         //[FromRoute], [FromBody], [FromQuery]
         //1. URL segment
         [HttpGet("{id}")]
