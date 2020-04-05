@@ -7,9 +7,7 @@ using Cwiczenie3.Models;
 using Cwiczenie3.DAL;
 using Microsoft.AspNetCore.Mvc;
 using System.Data.SqlClient;
-
-
-
+using Cwiczenie3.Services;
 
 namespace Cwiczenie3.Controllers
 {
@@ -175,8 +173,14 @@ namespace Cwiczenie3.Controllers
         }
 
 
+        [HttpPost]
+        public IActionResult EnrollmentsController(Student s)
+        {
+            IStudentsDbService service = new ServerDbService();
+            return null;
+
+        }
+
     }
 }
 
-
-//jsjsjjsk
