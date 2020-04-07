@@ -13,7 +13,7 @@ namespace Cwiczenie3.Controllers
         [HttpPost]
         public IActionResult Enrollments()
         {
-            return View();
+            return null;
         }
     }
 }
