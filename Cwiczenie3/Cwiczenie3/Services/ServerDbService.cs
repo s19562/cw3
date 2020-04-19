@@ -64,5 +64,28 @@ namespace Cwiczenie3.Services
             throw new NotImplementedException();
 
         }
+
+        public bool StudentExist(string index)
+        {
+
+            using (SqlConnection con = new SqlConnection("Data Source=db-mssql;Initial Catalog=s18889;Integrated Security=True"))
+            using (SqlCommand com = new SqlCommand())
+            {
+
+
+                com.Connection = con;
+                com.CommandText = $"select IndexNumber from Student where IndexNumber = '{index}'";
+                con.Open();
+
+
+                var dr = com.ExecuteReader();
+                if (dr.Read())
+                {
+                    return true;
+                }
+
+                return false;
+            }
+        }
     }
 }

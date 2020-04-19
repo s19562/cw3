@@ -81,8 +81,10 @@ namespace Cwiczenie3.Controllers
                 return CreatedAtAction("createStudent", new EnrollmentOdp { IdEnrollment = idEnrollment, IdStudy = idStudyEnrollment, Semester = semesterEnrollment, StartDate = startDateEnrollment });
 
             }
-
-
         }
+
+
+
+      
     }
 }

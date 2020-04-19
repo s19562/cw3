@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace Cwiczenie3.Services
 {
-    interface IStudentsDbService
+    public interface IStudentsDbService
     {
         public IActionResult StudentEnrolment(Student student);
+        bool StudentExist(string dbs);
     }
 }

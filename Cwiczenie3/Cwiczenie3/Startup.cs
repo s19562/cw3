@@ -4,8 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 //using Cwiczenie3.Serivices;
 using Cwiczenie3.DAL;
+using Cwiczenie3.Middlewares;
+using Cwiczenie3.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -49,7 +52,35 @@ namespace Cwiczenie3
                 context.Response.Headers.Add("Secret", "1234");
                 await c.Invoke();
             });
-            app.UseMiddleware<CustomMiddleware>();
+            app.Use(async (context, next) =>
+            {
+
+                if (!context.Request.Headers.ContainsKey("Index"))
+                {
+                    context.Response.StatusCode = Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized;
+                    await context.Response.WriteAsync("Nie podales loginu i hasla");
+                    return;
+                }
+
+                string index = context.Request.Headers["Index"].ToString();
+                IStudentsDbService dbs = new ServerDbService();
+
+                if (!dbs.StudentExist(index))
+                {
+                    context.Response.StatusCode = Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized;
+                    await context.Response.WriteAsync("blendny login lub chaslo");
+                    return;
+                }
+
+
+
+                await next();
+
+            }
+
+                 );
+
+            app.UseMiddleware<LogginMiddleware>();
 
             //app.UseHttpsRedirection;
 
@@ -60,5 +91,7 @@ namespace Cwiczenie3
                 endpoints.MapControllers();
             });
         }
+
+
     }
 }
